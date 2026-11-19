@@ -51,3 +51,16 @@ Documentos são serializados com `jsonEncode` e `jsonDecode` e ficam salvos na
 chave `documentos_db`. Tema, sessão e notificações ficam em chaves próprias.
 O editor cria ou atualiza documentos; a tela inicial lista, edita e exclui
 registros, que permanecem após recarregar o preview.
+
+## Publicação no GitHub Pages
+
+O workflow `.github/workflows/deploy-pages.yml` publica automaticamente a
+versão web sempre que houver um push na branch `main`.
+
+No repositório do GitHub, acesse **Settings > Pages > Build and deployment**,
+selecione **GitHub Actions** como fonte e execute o workflow pelo botão
+**Run workflow**, se necessário.
+
+O endereço esperado é:
+
+`https://juniornovais.github.io/edit-doc-flutter/`
