@@ -40,15 +40,14 @@ class BancoLocalService {
     for (final usuario in usuarios) {
       if (usuario.email == email && usuario.senha == senha) return usuario;
     }
+    return null;
+  }
 
-    Future<Usuario?> buscarUsuarioPorEmail(String email) async {
-      final usuarios = await getUsuarios();
-      for (final usuario in usuarios) {
-        if (usuario.email == email) return usuario;
-      }
-      return null;
+  Future<Usuario?> buscarUsuarioPorEmail(String email) async {
+    final usuarios = await getUsuarios();
+    for (final usuario in usuarios) {
+      if (usuario.email == email) return usuario;
     }
-
     return null;
   }
 
