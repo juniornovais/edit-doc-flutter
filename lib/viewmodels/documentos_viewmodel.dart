@@ -1,13 +1,17 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+
 import '../models/documento.dart';
-import '../services/banco_local_service.dart';
+import '../models/services/banco_local_service.dart';
 
 class DocumentosViewModel extends ChangeNotifier {
-  final BancoLocalService _bancoService = BancoLocalService();
+  DocumentosViewModel({BancoLocalService? bancoService})
+    : _bancoService = bancoService ?? BancoLocalService();
+
+  final BancoLocalService _bancoService;
   List<Documento> _documentos = [];
   bool _isLoading = false;
 
-  List<Documento> get documentos => _documentos;
+  List<Documento> get documentos => List.unmodifiable(_documentos);
   bool get isLoading => _isLoading;
 
   Future<void> carregarDocumentos() async {
@@ -19,30 +23,35 @@ class DocumentosViewModel extends ChangeNotifier {
   }
 
   Future<void> adicionarDocumento(String titulo, String conteudo) async {
-    final novo = Documento(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      titulo: titulo,
-      conteudo: conteudo,
-      ultimaModificacao: DateTime.now(),
+    _documentos.add(
+      Documento(
+        id: DateTime.now().microsecondsSinceEpoch.toString(),
+        titulo: titulo,
+        conteudo: conteudo,
+        ultimaModificacao: DateTime.now(),
+      ),
     );
-    _documentos.add(novo);
     await _bancoService.salvarDocumentos(_documentos);
     notifyListeners();
   }
 
-  Future<void> atualizarDocumento(String id, String titulo, String conteudo) async {
-    final index = _documentos.indexWhere((doc) => doc.id == id);
-    if (index != -1) {
-      _documentos[index].titulo = titulo;
-      _documentos[index].conteudo = conteudo;
-      _documentos[index].ultimaModificacao = DateTime.now();
-      await _bancoService.salvarDocumentos(_documentos);
-      notifyListeners();
-    }
+  Future<void> atualizarDocumento(
+    String id,
+    String titulo,
+    String conteudo,
+  ) async {
+    final index = _documentos.indexWhere((documento) => documento.id == id);
+    if (index == -1) return;
+    final documento = _documentos[index];
+    documento.titulo = titulo;
+    documento.conteudo = conteudo;
+    documento.ultimaModificacao = DateTime.now();
+    await _bancoService.salvarDocumentos(_documentos);
+    notifyListeners();
   }
 
   Future<void> excluirDocumento(String id) async {
-    _documentos.removeWhere((doc) => doc.id == id);
+    _documentos.removeWhere((documento) => documento.id == id);
     await _bancoService.salvarDocumentos(_documentos);
     notifyListeners();
   }

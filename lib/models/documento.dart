@@ -12,16 +12,16 @@ class Documento {
   });
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'titulo': titulo,
-        'conteudo': conteudo,
-        'ultimaModificacao': ultimaModificacao.toIso8601String(),
-      };
+    'id': id,
+    'titulo': titulo,
+    'conteudo': conteudo,
+    'ultimaModificacao': ultimaModificacao.toIso8601String(),
+  };
 
   factory Documento.fromJson(Map<String, dynamic> json) => Documento(
-        id: json['id'],
-        titulo: json['titulo'],
-        conteudo: json['conteudo'],
-        ultimaModificacao: DateTime.parse(json['ultimaModificacao']),
-      );
+    id: json['id'] as String,
+    titulo: json['titulo'] as String,
+    conteudo: json['conteudo'] as String,
+    ultimaModificacao: DateTime.parse(json['ultimaModificacao'] as String),
+  );
 }
